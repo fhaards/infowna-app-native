@@ -1,3 +1,11 @@
+<?php session_start(); ?>
+<?php require_once("config/connection.php"); ?>
+<?php date_default_timezone_set('Asia/Jakarta'); ?>
+<?php
+$setUri     = "/wna-app-sws";
+$url        = $setUri;
+$request    = $_SERVER['REQUEST_URI'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +18,14 @@
 </head>
 
 <body>
-    <div class="bg-light w-100 h-100vh justify-content-center">
-        <?php include "login-form.php"; ?>
+    <div class="w-100 mh-100 justify-content-center">
+        <?php
+        if (isset($_SESSION["user"])) {
+            include "main-pages.php";
+        } else {
+            include "auth-form.php";
+        }
+        ?>
     </div>
     <?php include "stacks-js.php"; ?>
 </body>

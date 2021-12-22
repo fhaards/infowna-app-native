@@ -1,5 +1,10 @@
+<?php
+    session_start();
+    if (!isset($_SESSION["user"])) header("Location: index.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +12,13 @@
     <title>SWS - CONSULTANT</title>
     <?php include "stacks-css.php"; ?>
 </head>
-<body>
-    <div class="bg-light w-100 h-100vh justify-content-center">
-        <?php include "partials/header.php"; ?>
-        <div class="container">
 
+<body>
+    <div class="w-100 justify-content-center relative">
+        <?php include "partials/header.php"; ?>
+        <div class="container mt-5 pt-5 h-100 px-4">
+            Logged In
+            <h3><?php echo  $_SESSION["user"]["name"] ?></h3>
         </div>
     </div>
     <?php include "stacks-js.php"; ?>
