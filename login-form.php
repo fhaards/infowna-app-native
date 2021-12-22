@@ -47,7 +47,10 @@
                     </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-4 d-flex justify-content-center gap-2 align-items-center">
+                        <i class="fas fa-sign-in-alt"></i> 
+                        <span>Sign in</span>
+                    </button>
 
                     <!-- Register buttons -->
                     <div class="text-center">
