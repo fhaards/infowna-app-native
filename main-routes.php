@@ -1,20 +1,85 @@
 <?php
-switch ($request) {
-    case $url . '/dashboard':
-        require "views/dashboard.php";
-        break;
-    case $url . '/users':
-        require "views/users/users-table.php";
-        break;
-    case $url . '/requests':
-        if ($_SESSION["user"]["user_group"] == 'admin') :
-            require "views/requests/requests-table.php";
-        else :
-            require "views/requests/requests-form.php";
-        endif;
-        break;
-    default:
+$getIdUser    = $_SESSION["user"]["uuid"];
+$checkStatus  = "SELECT * FROM users WHERE uuid = ?";
+$rowCekStatus = $db->prepare($checkStatus);
+$rowCekStatus->execute(array($getIdUser));
+$getStatusUser = $rowCekStatus->fetch();
+
+
+if (!empty($_GET['users'])) {
+    //USER PAGES
+    if ($_SESSION["user"]["user_group"] == 'user') :
         http_response_code(404);
         echo "404";
-        break;
+    else :
+        if ($_GET['users'] == 'table') :
+            require "views/users/users-table.php";
+        endif;
+        if ($_GET['users'] == 'delete') :
+            require "views/users/users-delete.php";
+        endif;
+    endif;
+} else if (!empty($_GET['profile'])) {
+    if ($_GET['profile'] == 'my-profile') :
+        require "views/profile/profile.php";
+    elseif ($_GET['profile'] == 'profile-edit') :
+        require "views/profile/profile-edit.php";
+    else :
+        http_response_code(404);
+        echo "404";
+    endif;
+} else if (!empty($_GET['requests'])) {
+    // REQUEST PAGES
+    if ($_GET['requests'] == 'table') :
+        if ($_SESSION["user"]["user_group"] == 'user') :
+            if ($getStatusUser['user_status'] == 0) :
+                require "partials/check_status.php";
+            else :
+                require "views/requests/requests-detail.php";
+            endif;
+        else :
+            require "views/requests/requests-table.php";
+        endif;
+    elseif ($_GET['requests'] == 'form') :
+    endif;
+} else if (!empty($_GET['home'])) {
+    if ($_GET['home'] == 'dashboard') :
+        require "views/dashboard.php";
+    endif;
+} else {
 }
+
+// ORDINARY PDO ROUTING
+    // <?php
+    // $setUri     = "/wna-app-sws";
+    // $url        = $setUri;
+    // $request    = $_SERVER['REQUEST_URI'];
+    // 
+    // 
+    // $getparse = "";
+    // switch ($request) {
+    // case $url . '/dashboard':
+    // require "views/dashboard.php";
+    // break;
+    // case $url . '/users':
+    // if (!empty($_GET['users'] == 'delete')) {
+    // require "views/users/users-delete.php";
+    // } else {
+    // require "views/users/users-table.php";
+    // }
+    // break;
+    // case $url . '/users-delete&id=' . $_GET['id']:
+    // require "views/users/users-delete.php";
+    // break;
+    // case $url . '/requests':
+    // if ($_SESSION["user"]["user_group"] == 'admin') :
+    // require "views/requests/requests-table.php";
+    // else :
+    // require "views/requests/requests-form.php";
+    // endif;
+    // break;
+    // default:
+    // http_response_code(404);
+    // echo "404";
+    // break;
+    // }

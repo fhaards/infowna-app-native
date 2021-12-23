@@ -71,7 +71,10 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $user["password"])) {
             session_start();
             $_SESSION["user"] = $user;
-            header("Location:$setUri/dashboard");
+            $_SESSION["login_status"] = 1;
+            header("Location:index.php?home=dashboard");
+        } else {
+            echo "<div class='alert alert-danger mx-2'> <strong>Ops !</strong> Youre email or password is not match to our credentials</div>";
         }
     }
 }

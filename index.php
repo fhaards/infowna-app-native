@@ -1,11 +1,6 @@
 <?php session_start(); ?>
 <?php require_once("config/connection.php"); ?>
 <?php date_default_timezone_set('Asia/Jakarta'); ?>
-<?php
-$setUri     = "/wna-app-sws";
-$url        = $setUri;
-$request    = $_SERVER['REQUEST_URI'];
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +15,7 @@ $request    = $_SERVER['REQUEST_URI'];
 <body>
     <div class="w-100 mh-100 justify-content-center">
         <?php
-        if (isset($_SESSION["user"])) {
+        if (isset($_SESSION["login_status"])) {
             include "main-pages.php";
         } else {
             include "auth-form.php";
