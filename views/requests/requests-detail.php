@@ -11,9 +11,6 @@ $getAccountsVal = $rowAccounts->fetch();
             <span class="text-blue-800">Residence Permit</span>
         </h2>
     </div>
-    <p class="">
-        Check Requests Status
-    </p>
 </div>
 
 <div class="card shadow-sm rounded-3 mb-3 border-0">
@@ -67,7 +64,6 @@ $getAccountsVal = $rowAccounts->fetch();
                     <?= $getCheckRequestsVal['phone']; ?>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -30,13 +30,13 @@
                                     <!-- Email input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="loginName">Email</label>
-                                        <input type="email" id="loginName" name="email" class="form-control" required />
+                                        <input type="email" id="loginName" name="email" class="form-control" placeholder="Input Youre Email Address" required />
                                     </div>
 
                                     <!-- Password input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="loginPassword">Password</label>
-                                        <input type="password" id="loginPassword" name="password" class="form-control" required />
+                                        <input type="password" id="loginPassword" name="password" placeholder="Input Youre Password" class="form-control" required />
                                     </div>
 
                                     <!-- 2 column grid layout -->

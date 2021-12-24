@@ -1,0 +1,9 @@
+{
+    "require": {
+        "components/jquery": "^3.6",
+        "twbs/bootstrap": "5.0.2",
+        "components/font-awesome": "^5.15",
+        "datatables/datatables": "^1.10",
+        "moment/moment": "^2.29"
+    }
+}

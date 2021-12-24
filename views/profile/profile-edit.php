@@ -69,9 +69,9 @@ if (isset($_POST['update-profile'])) {
     <div class="card-header px-md-5 py-3">
         Edit Profile - <?= $_SESSION['user']['name']; ?>
     </div>
-    <div class="card-body text-primary px-md-5 py-md-5">
-        <h5 class="card-title mb-5">Personal Information</h5>
-        <form class="row g-3" action="" method="POST">
+    <div class="card-body px-md-5 py-md-5">
+        <h5 class="card-title mb-5  text-primary">Personal Information</h5>
+        <form class="row g-3 text-secondary" action="" method="POST">
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Name</label>
                 <input type="text" class="form-control" name="name" value="<?= $_SESSION['user']['name']; ?>" id="inputPassword4">
