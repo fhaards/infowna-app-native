@@ -30,17 +30,27 @@ if (!empty($_GET['users'])) {
     endif;
 } else if (!empty($_GET['requests'])) {
     // REQUEST PAGES
+    $getCheckRequests = "SELECT * FROM requests WHERE uuid = ?";
+    $rowCekRequests   = $db->prepare($getCheckRequests);
+    $rowCekRequests->execute(array($getIdUser));
+    $getCheckRequestsVal = $rowCekRequests->fetch();
+    $countRequestsByUuid = $rowCekRequests->rowCount();
     if ($_GET['requests'] == 'table') :
         if ($_SESSION["user"]["user_group"] == 'user') :
             if ($getStatusUser['user_status'] == 0) :
                 require "partials/check_status.php";
             else :
-                require "views/requests/requests-detail.php";
+                echo '<script>window.location="index.php?requests=data"</script>';
             endif;
         else :
             require "views/requests/requests-table.php";
         endif;
-    elseif ($_GET['requests'] == 'form') :
+    elseif ($_GET['requests'] == 'data') :
+        if (!empty($countRequestsByUuid)) :
+            require "views/requests/requests-detail.php";
+        else :
+            require "views/requests/requests-form.php";
+        endif;
     endif;
 } else if (!empty($_GET['home'])) {
     if ($_GET['home'] == 'dashboard') :

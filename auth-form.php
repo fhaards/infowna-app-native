@@ -54,15 +54,11 @@
                                     </div>
 
                                     <!-- Submit button -->
-                                    <button type="submit" name="login" class="btn btn-primary shadow-lg btn-block mb-4 d-flex w-100 justify-content-center gap-3 align-items-center">
+                                    <button type="submit" name="login" class="btn btn-primary bg-gradient shadow-lg btn-block mb-4 d-flex w-100 justify-content-center gap-3 align-items-center">
                                         <i class="fas fa-sign-in-alt"></i>
                                         <span>Sign in</span>
                                     </button>
 
-                                    <!-- Register buttons -->
-                                    <div class="text-center">
-                                        <p>Not a member? <a href="#!">Register</a></p>
-                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -91,7 +87,7 @@
                                     </div>
 
                                     <!-- Submit button -->
-                                    <button type="submit" class="btn btn-primary btn-block mb-4 d-flex w-100 shadow-lg justify-content-center gap-3 align-items-center" name="register">
+                                    <button type="submit" class="btn btn-primary btn-block mb-4 bg-gradient d-flex w-100 shadow-lg justify-content-center gap-3 align-items-center" name="register">
                                         <i class="fas fa-save"></i>
                                         <span>Register</span>
                                     </button>
