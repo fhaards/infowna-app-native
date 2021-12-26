@@ -23,11 +23,22 @@ if (isset($_POST['register'])) {
     $resultMail->execute($paramCekmail);
     $numberResultMail = $resultMail->fetchColumn();
     if ($numberResultMail > 0) :
-?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Wops! Register Error </strong> Email has been taken.
-        </div>
-<?php
+        ?>
+        <script type="text/javascript">
+            swal.fire({
+                icon: "error",
+                title: "Error !!",
+                text: "Register Error , Email already exists",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                timer: 2000,
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = "index.php";
+                }
+            });
+        </script>
+        <?php
     else :
         $sql = "INSERT INTO users (name, uuid, email, password, user_group, user_status, created_at, updated_at) 
             VALUES (:name, :uuid, :email, :password, :user_group, :user_status, :created_at, :updated_at)";
@@ -45,13 +56,28 @@ if (isset($_POST['register'])) {
 
         $saved = $stmt->execute($params);
         if ($saved) {
-
             $insertAccounts = "INSERT INTO users_account (uuid) VALUES (:uuid)";
             $stmtAccounts   = $db->prepare($insertAccounts);
             $paramsAccounts = array(":uuid" => $getUuid);
             $savedAccounts  = $stmtAccounts->execute($paramsAccounts);
-
-            if ($savedAccounts) header("Location: index.php");
+            if ($savedAccounts) {
+            ?>
+                <script type="text/javascript">
+                    swal.fire({
+                        icon: "success",
+                        title: "Success !!",
+                        text: "Register Success , Please Login",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 2000,
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "index.php";
+                        }
+                    });
+                </script>
+            <?php
+            }
         }
     endif;
 }
@@ -74,7 +100,22 @@ if (isset($_POST['login'])) {
             $_SESSION["login_status"] = 1;
             header("Location:index.php?home=dashboard");
         } else {
-            echo "<div class='alert alert-danger mx-2'> <strong>Ops !</strong> Youre email or password is not match to our credentials</div>";
+            ?>
+            <script type="text/javascript">
+                swal.fire({
+                    icon: "error",
+                    title: "Ooops !!",
+                    text: "Youre email or password is not match to our credentials",
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timer: 1000,
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "index.php";
+                    }
+                });
+            </script>
+<?php
         }
     }
 }

@@ -6,18 +6,18 @@ $getAccountsVal = $rowAccounts->fetch();
 
 if (isset($_POST['submit-requests'])) {
     // SETUP FILES
+    $reqId          = date('dmyhis') . strtoupper(substr($getIdUser, 0, 8));
     $pathFiles      = $_FILES['files']['name'];
     $targetFiles    = 'storage/passport/' . $pathFiles;
     $fileExtension  = pathinfo($targetFiles, PATHINFO_EXTENSION);
     $fileExtension  = strtolower($fileExtension);
     // SET NEW NAME
-    $newName        = $getIdUser . '- Passport.' . $fileExtension;
+    $newName        = $reqId . '.' . $fileExtension;
     $newNamePath    = 'storage/passport/' . $newName;
     // VALIDATION FILES
     $validExtension = array("png", "jpeg", "jpg");
     if (in_array($fileExtension, $validExtension)) :
         if (move_uploaded_file($_FILES['files']['tmp_name'], $newNamePath)) :
-            $reqId          = date('dmyhis') . strtoupper(substr($getIdUser, 0, 8));
             $reqStatus      = 'Waiting';
             $name           = htmlentities($_POST['name']);
             $email          = htmlentities($_POST['email']);
@@ -47,13 +47,43 @@ if (isset($_POST['submit-requests'])) {
             );
             $savedRequest = $subRequests->execute($sendParRequest);
             if ($savedRequest) {
-                echo '<script>alert("Success, Youre Request Submit. Please Waiting");window.location="index.php?home=dashboard"</script>';
+                ?>
+                <script type="text/javascript">
+                    swal.fire({
+                        icon: "success",
+                        title: "Success !!",
+                        text: "Submit Requests Success, Cek the detail",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 2000,
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "index.php?requests=data";
+                        }
+                    });
+                </script>
+                <?php
             } else {
                 echo 'gagal';
             }
         endif;
     else :
-        echo "Not Supported Format";
+        ?>
+        <script type="text/javascript">
+            swal.fire({
+                icon: "error",
+                title: "Error !!",
+                text: "Not supported format files on Passport Image, please use jpg, jpeg, png",
+                showConfirmButton: true,
+                allowOutsideClick: false,
+                timer: 3000,
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = "index.php?requests=data";
+                }
+            });
+        </script>
+    <?php
     endif;
 }
 ?>

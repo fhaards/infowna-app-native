@@ -6,15 +6,75 @@ body {
     border-radius: 10px;
 }
 
+/* Dashboard */
+
+.counter-box {
+    display: block;
+    background: #e0f2fe;
+    padding: 40px 0px 0px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.counter-box p {
+    margin: 15px 0 0;
+    padding: 5px;
+    font-weight: 500;
+    background-color: #0d6efd;
+    color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.counter-box i {
+    font-size: 60px;
+    margin: 0 0 15px;
+    color: #0d6efd
+}
+
+.counter {
+    margin-top:10px;
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 28px
+}
+
+.counter-box.colored {
+    background: #3acf87
+}
+
+.counter-box.colored p,
+.counter-box.colored i,
+.counter-box.colored .counter {
+    color: #fff
+}
+
 .dash-jumbotron {
     background-color: #e0f2fe;
     background-image: url("../img/baseapp/hero-3.svg");
     background-repeat: no-repeat;
     background-size: 500px;
     background-position: bottom right;
+    border-radius: 10px;
 }
-@media only screen and (max-width:768px) { 
-    .dash-jumbotron { 
-        background-size:200px; 
+
+/* DATATABLES */
+.dataTables_wrapper .dataTables_length {
+    margin: 5px 0px 50px 0px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    margin: 5px 0px 50px 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    margin: 50px 0px 0px 0px;
+}
+
+@media only screen and (max-width:768px) {
+    .dash-jumbotron {
+        background-size: 200px;
     }
 }

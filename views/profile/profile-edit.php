@@ -56,11 +56,26 @@ if (isset($_POST['update-profile'])) {
                 $_SESSION["user"] = ""; //UNSET SESSION
                 session_start();
                 $_SESSION["user"] = $updatedSession; //REGENERATE SESSION
-                echo '<script>alert("Success, Youre Account Updated");window.location="index.php?home=dashboard"</script>';
+                ?>
+                    <script type="text/javascript">
+                        swal.fire({
+                            icon: "success",
+                            title: "Success !!",
+                            text: "Edit Profile Success ,  You can submitting requests now",
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            timer: 2000,
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                window.location.href = "index.php?home=dashboard";
+                            }
+                        });
+                    </script>
+                <?php
             }
         }
     } else {
-        echo 'gagal';
+        echo 'Errors';
     }
 }
 ?>

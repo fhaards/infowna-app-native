@@ -29,10 +29,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="index.php?profile=my-profile">My profile</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="index.php?profile=profile-edit">Settings</a>
+                                <a class="dropdown-item" href="index.php?profile=profile-edit">Setting Profile</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="auth-destroy.php">Logout</a>

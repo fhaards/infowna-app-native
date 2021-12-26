@@ -6,8 +6,8 @@ $rowCekStatus->execute(array($getIdUser));
 $getStatusUser = $rowCekStatus->fetch();
 
 
-if (!empty($_GET['users'])) {
-    //USER PAGES
+if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
+
     if ($_SESSION["user"]["user_group"] == 'user') :
         http_response_code(404);
         echo "404";
@@ -19,17 +19,14 @@ if (!empty($_GET['users'])) {
             require "views/users/users-delete.php";
         endif;
     endif;
-} else if (!empty($_GET['profile'])) {
-    if ($_GET['profile'] == 'my-profile') :
-        require "views/profile/profile.php";
-    elseif ($_GET['profile'] == 'profile-edit') :
+} else if (!empty($_GET['profile'])) { //PROFILE PAGES
+    if ($_GET['profile'] == 'profile-edit') :
         require "views/profile/profile-edit.php";
     else :
         http_response_code(404);
         echo "404";
     endif;
-} else if (!empty($_GET['requests'])) {
-    // REQUEST PAGES
+} else if (!empty($_GET['requests'])) { // REQUEST PAGES
     $getCheckRequests = "SELECT * FROM requests WHERE uuid = ?";
     $rowCekRequests   = $db->prepare($getCheckRequests);
     $rowCekRequests->execute(array($getIdUser));
@@ -46,20 +43,36 @@ if (!empty($_GET['users'])) {
             require "views/requests/requests-table.php";
         endif;
     elseif ($_GET['requests'] == 'data') :
-        if (!empty($countRequestsByUuid)) :
-            require "views/requests/requests-detail.php";
+        if ($getStatusUser['user_status'] == 0) :
+            echo '<script>window.location="index.php?profile=profile-edit"</script>';
         else :
-            require "views/requests/requests-form.php";
+            if ($countRequestsByUuid != 0) :
+                require "views/requests/requests-detail.php";
+            else :
+                require "views/requests/requests-form.php";
+            endif;
         endif;
     endif;
-} else if (!empty($_GET['home'])) {
+} else if (!empty($_GET['home'])) { //DASHBOARD PAGES
     if ($_GET['home'] == 'dashboard') :
         require "views/dashboard.php";
+        if ($_SESSION["user"]["user_group"] == 'user') :
+            if ($getStatusUser['user_status'] == 0) :
+                require "partials/check_status.php";
+            endif;
+            require "views/dashboard-user.php";
+        elseif ($_SESSION["user"]["user_group"] == 'admin') :
+            require "views/dashboard-admin.php";
+        else :
+            http_response_code(404);
+            echo "404";
+        endif;
+
     endif;
 } else {
 }
 
-// ORDINARY PDO ROUTING
+// ORIGINAL PDO ROUTING WITH SPO METHOD
     // <?php
     // $setUri     = "/wna-app-sws";
     // $url        = $setUri;
