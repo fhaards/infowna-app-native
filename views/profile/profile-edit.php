@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 $getAccounts    = "SELECT * FROM users_account WHERE uuid = ?";
 $rowAccounts    = $db->prepare($getAccounts);
 $rowAccounts->execute(array($getIdUser));
@@ -56,22 +57,22 @@ if (isset($_POST['update-profile'])) {
                 $_SESSION["user"] = ""; //UNSET SESSION
                 session_start();
                 $_SESSION["user"] = $updatedSession; //REGENERATE SESSION
-                ?>
-                    <script type="text/javascript">
-                        swal.fire({
-                            icon: "success",
-                            title: "Success !!",
-                            text: "Edit Profile Success ,  You can submitting requests now",
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                            timer: 2000,
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                window.location.href = "index.php?home=dashboard";
-                            }
-                        });
-                    </script>
-                <?php
+?>
+                <script type="text/javascript">
+                    swal.fire({
+                        icon: "success",
+                        title: "Success !!",
+                        text: "Edit Profile Success ,  You can submitting requests now",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 2000,
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "index.php?home=dashboard";
+                        }
+                    });
+                </script>
+<?php
             }
         }
     } else {
@@ -86,14 +87,14 @@ if (isset($_POST['update-profile'])) {
     </div>
     <div class="card-body px-md-5 py-md-5">
         <h5 class="card-title mb-5  text-primary">Personal Information</h5>
-        <form class="row g-3 text-secondary" action="" method="POST">
+        <form class="row g-3 text-secondary" action="" method="POST" id="formEditProfile">
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" value="<?= $_SESSION['user']['name']; ?>" id="inputPassword4">
+                <input type="text" class="form-control bg-light" name="name" value="<?= $_SESSION['user']['name']; ?>" id="inputPassword4">
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" value="<?= $_SESSION['user']['email']; ?>" id="inputEmail4">
+                <input type="email" class="form-control bg-light" name="email" value="<?= $_SESSION['user']['email']; ?>" id="inputEmail4">
             </div>
             <div class="col-md-2">
                 <label for="inputGender" class="form-label">Gender</label>
@@ -123,17 +124,25 @@ if (isset($_POST['update-profile'])) {
                 <input type="text" class="form-control" id="inputBirthPlace" name="birth_place" value="<?= $getAccountsVal['birth_place']; ?>">
             </div>
             <div class="col-md-12">
-                <label for="inputAddress" class="form-label">Address</label>
+                <label for="inputAddress" class="form-label">KYC Address</label>
                 <input type="text" class="form-control" id="inputAddress" name="address" value="<?= $getAccountsVal['address']; ?>">
             </div>
             <div class="col-md-4">
-                <label for="inputcountry" class="form-label">Country</label>
-                <select id="inputcountry" class="form-select" name="country">
-                    <option value="Indonesia">Indonesia</option>
+                <label for="inputCountry" class="form-label">Country</label> <br>
+                <!-- Loading Spinner for Country -->
+                <div class="d-flex flex-row gap-2 align-items-center" id="loadingCountry">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="">Loading get country ... </span>
+                </div>
+                <!-- Get Counry from API -->
+                <input type="hidden" id="userHaveCountry" value="<?= $getAccountsVal['country']; ?>">
+                <select id="inputCountry" class="form-select" name="country">
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="inputDistricts" class="form-label">Districts</label>
+                <label for="inputDistricts" class="form-label">Districts / City</label>
                 <input type="text" class="form-control" id="inputDistricts" name="districts" value="<?= $getAccountsVal['districts']; ?>">
             </div>
             <div class="col-md-4">
@@ -141,7 +150,7 @@ if (isset($_POST['update-profile'])) {
                 <input type="text" class="form-control" id="inputZip" name="postcode" value="<?= $getAccountsVal['postcode']; ?>">
             </div>
             <div class="col-12 mt-5">
-                <button type="submit" name="update-profile" class="btn btn-primary d-flex align-items-center gap-3 justify-content-center w-100">
+                <button type="submit" name="update-profile" id="submitEditProfile" class="btn btn-primary d-flex align-items-center gap-3 justify-content-center w-100">
                     <span class="fas fa-save"></span>
                     <span>Save</span>
                 </button>

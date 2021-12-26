@@ -3,7 +3,36 @@
 <script src="vendor/components/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="vendor/datatables/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    const countriesList = document.getElementById("inputCountry");
+    const ownCountries = document.querySelector("#userHaveCountry").value;
+    const loadingCountries = document.getElementById("loadingCountry");
+    let countries;
+    countriesList.classList.add("d-none");
+    document.getElementById("submitEditProfile").disabled = true;
+    fetch("https://restcountries.com/v3.1/all")
+        .then((res) => res.json())
+        .then((data) => initialize(data))
+        .catch((err) => console.log("Error:", err));
 
+    function initialize(countriesData) {
+        countriesList.classList.remove("d-none");
+        loadingCountries.classList.add("d-none");
+        document.getElementById("submitEditProfile").disabled = false;
+        countries = countriesData;
+        let options = "";
+        var getCountryName;
+        for (let i = 0; i < countries.length; i++) {
+            getCountryName = countries[i].name.common;
+            options += `<option value="${getCountryName}">${getCountryName}</option>`;
+        }
+
+        countriesList.innerHTML = options;
+        if (ownCountries !== null) {
+            countriesList.value = ownCountries;
+        }
+    }
+</script>
 <script>
     var APP_URL = 'http://localhost/wna-app-sws/';
 
@@ -93,33 +122,3 @@
         });
     });
 </script>
-
-<!-- VANILLA METHODS -->
-<!-- <script>
-    var APP_URL = 'http://localhost/wna-app-sws/';
-    const requestModalDetail = document.querySelector("#request-detail-modal");
-    var detailUser = document.querySelectorAll(
-        "#table-request tbody .detail-request"
-    );
-    for (let i = 0; i < detailUser.length; i++) {
-        (function() {
-            detailUser[i].addEventListener(
-                "click",
-                function(e) {
-                    e.preventDefault();
-                    var getReqid = detailUser[i].getAttributeNode("reqid").value;
-                    loadDetailRequests(getReqid);
-                },
-                false
-            );
-
-            async function loadDetailRequests(id) {
-                const responses = await fetch(APP_URL + 'views/requests-detail-admin?reqid=' + id, {
-                });
-
-                var detailResponse = await responses.json();
-                console.log(detailResponse);
-            }
-        })();
-    }
-</script> -->

@@ -3,7 +3,7 @@
     <div class="container d-flex justify-content-md-center px-md-4 py-0">
         <div class="col-md-10 col-12 d-md-flex   border-bottom  py-3">
             <div class="d-flex w-100">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand px-2 py-2" href="index.php?home=dashboard">
                     <img src="assets/img/baseapp/logo-sws-b.svg" height="30px" class="d-md-block d-none">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
