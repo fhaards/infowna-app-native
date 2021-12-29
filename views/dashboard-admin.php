@@ -14,22 +14,22 @@ $getCountReqApp   = $db->prepare($dashCountReqApp);
 $getCountReqApp->execute(array('Approved'));
 $countRequestsApp     = $getCountReqApp->rowCount();
 ?>
-<div class="row">
-    <div class="four col-md-4">
+<div class="row" >
+    <div class="four col-md-4" data-aos="fade-up" data-aos-delay="300">
         <div class="counter-box">
             <i class="fa fa-users"></i>
             <span class="counter display-6"><?= $countUsers; ?></span>
             <p>Registered User</p>
         </div>
     </div>
-    <div class="four col-md-4">
+    <div class="four col-md-4" data-aos="fade-up" data-aos-delay="400">
         <div class="counter-box">
             <i class="fa fa-file"></i>
             <span class="counter display-6"><?= $countRequests; ?></span>
             <p>Total Requests</p>
         </div>
     </div>
-    <div class="four col-md-4">
+    <div class="four col-md-4" data-aos="fade-up" data-aos-delay="500">
         <div class="counter-box">
             <i class="fa fa-file-signature"></i>
             <span class="counter display-6"><?= $countRequestsApp; ?></span>

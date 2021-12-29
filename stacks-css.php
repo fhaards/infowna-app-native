@@ -7,5 +7,6 @@
 <!-- Bootstrap  -->
 <link href="vendor/datatables/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="config/aos-master/dist/aos.css" rel="stylesheet">
 <!-- CUSTOM -->
 <link href="assets/css/style.css" rel="stylesheet">
