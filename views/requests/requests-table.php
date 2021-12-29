@@ -8,7 +8,7 @@
         </h5>
     </div>
 </section>
-<div class="table-responsive py-5 px-2 text-left">
+<div class="table-responsive py-5 px-2 text-left" id="table">
     <table id="table-request" class="dataTables table table-bordered table-striped mt-5" style="width:100%">
         <thead>
             <tr>
@@ -51,13 +51,16 @@
                         </a>
                     </td>
                     <td class="py-3" style="text-align: center;">
-                        <a onclick="return confirm('Apakah yakin data akan di hapus?')" href="index.php?users=delete&uuid=<?= $reqid; ?>" class="btn btn-danger btn-sm">
+                        <button tableContents="requests" deleteId="<?= $reqid; ?>" class="delete-btn btn btn-danger btn-sm">
                             <span class="fa fa-trash"></span>
-                        </a>
+                        </button>
+                        <!-- <a onclick="return confirm('Apakah yakin data akan di hapus?')" href="index.php?users=delete&uuid=<?= $reqid; ?>" class="btn btn-danger btn-sm">
+                            <span class="fa fa-trash"></span>
+                        </a> -->
                         <a href="views/requests/requests-print.php?reqid=<?= $reqid; ?>" target="_blank" class="btn btn-dark btn-sm">
                             <span class="fa fa-print"></span>
                         </a>
-      
+
                     </td>
                 </tr>
             <?php

@@ -1,6 +1,12 @@
 <?php
 
-$db_host = "localhost";
+//Root file
+$rootName = "localhost";
+$rootUrl  = "http://localhost/";
+$rootMain = "wna-app-sws";
+
+//Database Config
+$db_host = $rootName;
 $db_user = "root";
 $db_pass = "";
 $db_name = "db_wna_sws";

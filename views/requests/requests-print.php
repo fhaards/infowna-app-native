@@ -1,5 +1,6 @@
 <?php
 require_once("../../config/dompdf/autoload.inc.php");
+include "../../config/connection.php";
 
 use Dompdf\Dompdf;
 
@@ -20,7 +21,7 @@ $opts = array(
     )
 );
 $context  = stream_context_create($opts);
-$html = file_get_contents('http://localhost/wna-app-sws/views/requests/requests-print-details.php?reqid=' . $print_reqId, false, $context);
+$html = file_get_contents($rootUrl . '/' . $rootMain . '/views/requests/requests-print-details.php?reqid=' . $print_reqId, false, $context);
 $dompdf->loadHtml($html);
 $dompdf->render();
 //buat page number
@@ -29,45 +30,3 @@ $dompdf->getCanvas()->page_text(500, 822, "Page {PAGE_NUM}/{PAGE_COUNT}", $font,
 ob_end_clean();
 $dompdf->stream('' . $namefile, array('Attachment' => 0));
 $output = $dompdf->output();
-
-
-// $html .= '<html><body>';
-// $html .= '<header>';
-// $html .= '<h1>Holly Shiet Mehh </h1>';
-// $html .= '<p>Dashboradinng' . $print_reqId . '</p>';
-// $html .= '</header>';
-// $html .= '<table class="" border="1">';
-// $html .= '<tr>' .
-//             '<td>Request ID</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Name</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Email</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Phone</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Gender</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Nationality</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Passport ID</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '<tr>' .
-//             '<td>Address In Indonesia</td>' .
-//             '<td></td>' .
-//          '</tr>';
-// $html .= '</table>';
-// $html .= '</body></html>';

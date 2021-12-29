@@ -107,7 +107,7 @@ $print_reqId = $_GET['reqid'];
                     <td>
                         <div class="logos">
                             <?php
-                            $pathLogo  = 'http://localhost/wna-app-sws/assets/img/baseapp/logo-sws-b.png';
+                            $pathLogo  = $rootUrl . '/' . $rootMain . '/assets/img/baseapp/logo-sws-b.png';
                             $typeLogo  = pathinfo($pathLogo, PATHINFO_EXTENSION);
                             $dataLogo  = file_get_contents($pathLogo);
                             $logoImage = 'data:image/' . $typeLogo . ';base64,' . base64_encode($dataLogo);
@@ -171,7 +171,7 @@ $print_reqId = $_GET['reqid'];
                     <strong>Passport Image</strong> <br><br>
                     <?php
                     $passportImg = $getCheckRequestsVal['passport_img'];
-                    $pathPassp   = 'http://localhost/wna-app-sws/storage/passport/' . $passportImg;
+                    $pathPassp   = $rootUrl . '/' . $rootMain . '/storage/passport/' . $passportImg;
                     $typePassp   = pathinfo($pathPassp, PATHINFO_EXTENSION);
                     $dataPassp   = file_get_contents($pathPassp);
                     $PasspImage  = 'data:image/' . $typePassp . ';base64,' . base64_encode($dataPassp);

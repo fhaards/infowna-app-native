@@ -8,8 +8,8 @@
         </h5>
     </div>
 </section>
-<div class="table-responsive py-5">
-    <table class="dataTables table table-bordered table-striped mt-5">
+<div class="table-responsive py-5" id="table">
+    <table class="dataTables table table-bordered table-striped mt-5 user-Table">
         <thead>
             <tr>
                 <th class="p-2" width="50px">No</th>
@@ -38,9 +38,12 @@
                     <td><?= $item['email']; ?></td>
                     <td><?= date('d/m/Y - H:i', strtotime($item['created_at'])); ?></td>
                     <td style="text-align: center;">
-                        <a onclick="return confirm('Apakah yakin data akan di hapus?')" href="index.php?users=delete&uuid=<?= $uuid; ?>" class="btn btn-danger btn-sm">
+                        <!-- <a onclick="return confirm('Apakah yakin data akan di hapus?')" href="index.php?users=delete&uuid=<?= $uuid; ?>" class="btn btn-danger btn-sm">
                             <span class="fa fa-trash"></span>
-                        </a>
+                        </a> -->
+                        <button tableContents="user" deleteId="<?= $uuid; ?>" class="delete-btn btn btn-danger btn-sm">
+                            <span class="fa fa-trash"></span>
+                        </button>
                     </td>
                 </tr>
             <?php
