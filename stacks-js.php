@@ -1,9 +1,5 @@
-<!-- Extended Js -->
-<script src="vendor/moment/moment/min/moment.min.js" type="text/javascript"></script>
-<script src="vendor/components/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="vendor/datatables/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
-<script src="config/aos-master/dist/aos.js" type="text/javascript"></script>
+<!-- Template Main JS File -->
+<script type="text/javascript" src="assets/js/main.js"></script>
 <script type="text/javascript">
     const countriesList = document.getElementById("inputCountry");
     const ownCountries = document.querySelector("#userHaveCountry").value;
@@ -36,6 +32,7 @@
 </script>
 <script>
     AOS.init();
+    tinymce.init({selector: '.tinymce'});
     var APP_DIR = 'wna-app-sws'
     var APP_URL = 'http://localhost/' + APP_DIR + '/';
 
@@ -140,8 +137,6 @@
             }
         });
     });
-
-
 
     // Deletes Buttons
     $("#table").on("click", ".delete-btn", function(del) {

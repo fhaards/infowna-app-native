@@ -7,7 +7,6 @@ $getStatusUser = $rowCekStatus->fetch();
 
 
 if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
-
     if ($_SESSION["user"]["user_group"] == 'user') :
         http_response_code(404);
         echo "404";
@@ -22,6 +21,13 @@ if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
 } else if (!empty($_GET['profile'])) { //PROFILE PAGES
     if ($_GET['profile'] == 'profile-edit') :
         require "views/profile/profile-edit.php";
+    else :
+        http_response_code(404);
+        echo "404";
+    endif;
+} else if (!empty($_GET['about'])) { //PROFILE PAGES
+    if ($_GET['about'] == 'about-edit') :
+        require "views/about/about-edit.php";
     else :
         http_response_code(404);
         echo "404";

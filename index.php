@@ -14,16 +14,17 @@
 </head>
 
 <body>
-    <div class="w-100 mh-100 justify-content-center">
-        <?php
-        if (isset($_SESSION["login_status"])) {
-            include "main-pages.php";
-        } else {
-            include "auth-form.php";
-        }
-        ?>
-    </div>
+    <?php include "partials/header.php";?>
+    <?php
+    if (isset($_SESSION["login_status"])) {
+        include "main-pages.php";
+    } else {
+        include "homepages.php";
+        // include "auth-form.php";
+    }
+    ?>
     <?php include "partials/modals.php"; ?>
+    <?php include "stacks-js-main.php"; ?>
     <?php include "stacks-js.php"; ?>
 
 </body>

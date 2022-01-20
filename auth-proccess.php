@@ -23,7 +23,7 @@ if (isset($_POST['register'])) {
     $resultMail->execute($paramCekmail);
     $numberResultMail = $resultMail->fetchColumn();
     if ($numberResultMail > 0) :
-        ?>
+?>
         <script type="text/javascript">
             swal.fire({
                 icon: "error",
@@ -61,7 +61,7 @@ if (isset($_POST['register'])) {
             $paramsAccounts = array(":uuid" => $getUuid);
             $savedAccounts  = $stmtAccounts->execute($paramsAccounts);
             if ($savedAccounts) {
-            ?>
+        ?>
                 <script type="text/javascript">
                     swal.fire({
                         icon: "success",
@@ -98,9 +98,14 @@ if (isset($_POST['login'])) {
             session_start();
             $_SESSION["user"] = $user;
             $_SESSION["login_status"] = 1;
-            header("Location:index.php?home=dashboard");
-        } else {
             ?>
+            <script>
+                window.location.href = "index.php?home=dashboard";
+            </script>
+        <?php
+            // header("Location:index.php?home=dashboard");
+        } else {
+        ?>
             <script type="text/javascript">
                 swal.fire({
                     icon: "error",

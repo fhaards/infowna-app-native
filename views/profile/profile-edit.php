@@ -81,10 +81,16 @@ if (isset($_POST['update-profile'])) {
 }
 ?>
 
-<div class="card border shadow-sm rounded-3 mb-3">
-    <div class="card-header px-md-5 py-3">
-        Edit Profile - <?= $_SESSION['user']['name']; ?>
+<section id="faq" class="section-content mb-3 border-bottom">
+    <div class="max-w-xl mx-auto lg:ml-0" data-aos="fade-up">
+        <header class="section-header">
+            <h2>Edit Profile </h2>
+            <p>My Profile , <?= $_SESSION['user']['name']; ?></p>
+        </header>
     </div>
+</section>
+
+<div class="card shadow-sm border-0 rounded-3 mb-3">
     <div class="card-body px-md-5 py-md-5">
         <h5 class="card-title mb-5  text-primary">Personal Information</h5>
         <form class="row g-3 text-secondary" action="" method="POST" id="formEditProfile">

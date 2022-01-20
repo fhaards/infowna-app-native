@@ -1,13 +1,12 @@
-<div class="d-flex align-items-start  mb-3 justify-content-center w-100">
-    <div class="col-md-5 col-lg-4  col-11 py-5 w-full">
+<!-- <div class="text-center mb-3">
+    <img src="assets/img/baseapp/logo-sws-w.svg" height="65px" class="w-100 p-3 bg-dark bg-gradient rounded">
+</div> -->
 
-        <div class="text-center mb-3 m-2">
-            <img src="assets/img/baseapp/logo-sws-w.svg" height="65px" class="w-100 p-3 bg-dark bg-gradient rounded">
-        </div>
-
-        <?php include "auth-proccess.php"; ?>
-
-        <ul class="nav nav-pills px-2 flex flex-row gap-3 mb-3" role="tablist">
+<?php include "auth-proccess.php"; ?>
+<div class="col-md-6"></div>
+<div class="col-md-6">
+    <div class="d-flex flex-column w-100">
+        <ul class="nav nav-pills flex flex-row gap-3 mb-3 bg-white" role="tablist">
             <li class="nav-item flex-grow-1">
                 <a class="nav-link border active text-center" data-bs-toggle="pill" href="#pill-login">Login</a>
             </li>
@@ -17,10 +16,8 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="card mx-2 shadow-sm">
+        <div class="card">
             <div class="card-body">
-
-
                 <div class="tab-content w-100">
                     <div id="pill-login" class="col-12 container tab-pane active"><br>
                         <div class="row">
@@ -88,7 +85,7 @@
 
                                     <!-- Submit button -->
                                     <button type="submit" class="btn btn-primary btn-block mb-4 bg-gradient d-flex w-100 shadow-lg justify-content-center gap-3 align-items-center" name="register">
-                                        <i class="fas fa-save"></i>
+                                        <i class="fas fa-check"></i>
                                         <span>Register</span>
                                     </button>
                                 </form>
@@ -99,5 +96,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

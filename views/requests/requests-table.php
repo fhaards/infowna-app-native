@@ -1,13 +1,12 @@
-<section class="lg:text-left mb-5">
-    <div class="max-w-xl mx-auto lg:ml-0">
-        <h4 class="text-sm font-medium text-primary font-capitalize">
-            Requests Application
-        </h4>
-        <h5 class="mt-2 text-3xl font-bold sm:text-4xl">
-            <span class="text-blue-800">Residence Permit</span>
-        </h5>
+<section id="faq" class="section-content mb-3 border-bottom">
+    <div class="max-w-xl mx-auto lg:ml-0" data-aos="fade-up">
+        <header class="section-header">
+            <h2>Requests Application</h2>
+            <p>Residence Permit</p>
+        </header>
     </div>
 </section>
+
 <div class="table-responsive py-5 px-2 text-left" id="table">
     <table id="table-request" class="dataTables table table-bordered table-striped mt-5" style="width:100%">
         <thead>
