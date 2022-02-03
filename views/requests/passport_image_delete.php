@@ -1,11 +1,15 @@
 <?php
 include "../../config/connection.php";
-$pasDel   = $_GET['pasDel'];
+$pasDel   = $_GET['delId'];
 $nameImg  = $_GET['nameImg'];
-$sql1     = "DELETE passport_img FROM requests WHERE req_id = '$pasDel'";
-$row1     = $db->prepare($sql1);
-$deleteTableUser = $row1->execute();
-if ($deleteTableUser) {
+if ($nameImg == 'passport_img') {
+    $sql1     = $db->prepare("UPDATE `requests` SET `passport_img` = '' WHERE `req_id` = ?");
+} else {
+    $sql1     = $db->prepare("UPDATE `requests` SET `visa_img` = '' WHERE `req_id` = ?");
+}
+
+$deleteImgs = $sql1->execute(array($pasDel));
+if ($deleteImgs) {
     $response = array(
         'status' => 200,
         'message' => 'Success'

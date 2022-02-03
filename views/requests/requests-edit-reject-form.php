@@ -3,40 +3,43 @@ if (isset($_POST['submit-edit-requests'])) {
     // SETUP FILES
     $reqId          = htmlentities($_POST['req_id']);
 
-    $olddPassImg    = htmlentities($_POST['olddPassImg']);
+    $oldPassImg     = htmlentities($_POST['olddPassImg']);
     $oldVisaImg     = htmlentities($_POST['oldVisaImg']);
 
     $pathFiles      = $_FILES['files']['name'];
     $pathVisas      = $_FILES['visa']['name'];
 
-    $targetFiles    = 'storage/passport/' . $pathFiles;
-    $fileExtension  = pathinfo($targetFiles, PATHINFO_EXTENSION);
-    $fileExtension  = strtolower($fileExtension);
+    if (!empty($pathFiles)) {
+        $targetFiles    = 'storage/passport/' . $pathFiles;
+        $fileExtension  = pathinfo($targetFiles, PATHINFO_EXTENSION);
+        $fileExtension  = strtolower($fileExtension);
+        $newName        = $reqId . '-Passport.' . $fileExtension;
+        $newNamePath    = 'storage/passport/' . $newName;
+        chown($path, 666);
+        move_uploaded_file($_FILES['files']['tmp_name'], $newNamePath);
+    } else {
+        $newName = $oldPassImg;
+    }
 
-    $targetFiles2    = 'storage/visa/' . $pathVisas;
-    $fileExtension2  = pathinfo($targetFiles2, PATHINFO_EXTENSION);
-    $fileExtension2  = strtolower($fileExtension2);
+    if (!empty($pathVisas)) {
+        $targetFiles2    = 'storage/visa/' . $pathVisas;
+        $fileExtension2  = pathinfo($targetFiles2, PATHINFO_EXTENSION);
+        $fileExtension2  = strtolower($fileExtension2);
+        $newNameVisa    = $reqId . '-Visa.' . $fileExtension2;
+        $newNameVisaPath = 'storage/visa/' . $newNameVisa;
+        move_uploaded_file($_FILES['visa']['tmp_name'], $newNameVisaPath);
+    } else {
+        $newNameVisa = $oldVisaImg;
+    }
 
-    // SET NEW NAME
-    $newName        = $reqId . '-Passport.' . $fileExtension;
-    $newNameVisa    = $reqId . '-Visa.' . $fileExtension2;
 
-    $newNamePath     = 'storage/passport/' . $newName;
-    $newNameVisaPath = 'storage/visa/' . $newNameVisa;
+    $reqStatus      = 'Waiting';
+    $phone          = htmlentities($_POST['phone']);
+    $address_id     = htmlentities($_POST['address_id']);
+    $passport_id    = htmlentities($_POST['passport_id']);
+    $requests_type  = htmlentities($_POST['requests_type']);
 
-    // VALIDATION FILES
-    $validExtension = array("png", "jpeg", "jpg");
-    if (in_array($fileExtension, $validExtension)) :
-        if (move_uploaded_file($_FILES['files']['tmp_name'], $newNamePath)) :
-            if (move_uploaded_file($_FILES['visa']['tmp_name'], $newNameVisaPath)) :
-
-                $reqStatus      = 'Waiting';
-                $phone          = htmlentities($_POST['phone']);
-                $address_id     = htmlentities($_POST['address_id']);
-                $passport_id    = htmlentities($_POST['passport_id']);
-                $requests_type  = htmlentities($_POST['requests_type']);
-
-                $insertRequests = "UPDATE `requests`  SET
+    $insertRequests = "UPDATE `requests`  SET
                                 'phone' = :phone,
                                 'passport_id' = :passport_id,
                                 'address_id' = :address_id,
@@ -47,57 +50,36 @@ if (isset($_POST['submit-edit-requests'])) {
                                 'updated_at' = :updated_at
                                 WHERE 'req_id' = :req_id";
 
-                $subRequests = $db->prepare($insertRequests);
-                $sendParRequest = array(
-                    ":req_id"        => $reqId,
-                    ":phone"         => $phone,
-                    ":passport_id"   => $passport_id,
-                    ":address_id"    => $address_id,
-                    ":passport_img"  => $newName,
-                    ":visa_img"      => $newNameVisa,
-                    ":req_status"    => $reqStatus,
-                    ":requests_type" => $requests_type,
-                    ":updated_at"    => date('Y-m-d H:i:s'),
-                );
-                $savedRequest = $subRequests->execute($sendParRequest);
-                if ($savedRequest) { ?>
-                    <script type="text/javascript">
-                        swal.fire({
-                            icon: "success",
-                            title: "Success !!",
-                            text: "Submit Requests Success, Cek the detail",
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                            timer: 2000,
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                window.location.href = "index.php?requests=table";
-                            }
-                        });
-                    </script>
-            <?php } else {
-                    echo 'gagal';
+    $subRequests = $db->prepare($insertRequests);
+    $sendParRequest = array(
+        ":req_id"        => $reqId,
+        ":phone"         => $phone,
+        ":passport_id"   => $passport_id,
+        ":address_id"    => $address_id,
+        ":passport_img"  => $newName,
+        ":visa_img"      => $newNameVisa,
+        ":req_status"    => $reqStatus,
+        ":requests_type" => $requests_type,
+        ":updated_at"    => date('Y-m-d H:i:s'),
+    );
+    $savedRequest = $subRequests->execute($sendParRequest);
+    if ($savedRequest) :
+?>
+        <script type="text/javascript">
+            swal.fire({
+                icon: "error",
+                title: "Error !!",
+                text: "Not supported format files on Passport Image, please use jpg, jpeg, png",
+                showConfirmButton: true,
+                allowOutsideClick: false,
+                timer: 3000,
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = "index.php?requests=table";
                 }
-
-            endif;
-        else :
-            ?>
-            <script type="text/javascript">
-                swal.fire({
-                    icon: "error",
-                    title: "Error !!",
-                    text: "Not supported format files on Passport Image, please use jpg, jpeg, png",
-                    showConfirmButton: true,
-                    allowOutsideClick: false,
-                    timer: 3000,
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "index.php?requests=table";
-                    }
-                });
-            </script>
+            });
+        </script>
 <?php
-        endif;
     endif;
 }
 ?>
@@ -198,7 +180,7 @@ if (isset($_POST['submit-edit-requests'])) {
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Passport Image</label>
                     <?php if (!empty($rdt['passport_img'])) : ?>
-                        <a href="javascript:void(0);" nameImg="passport_img"  delId="<?= $rdt['req_id']; ?>" class="deleteImagesReq text-danger btn-link"> Delete Passport </a>
+                        <a href="javascript:void(0);" nameImg="passport_img" delId="<?= $rdt['req_id']; ?>" class="deleteImagesReq text-danger btn-link"> Delete Passport </a>
                         <div class="row">
                             <div class="col-md-10 row" style="object-fit:cover;">
                                 <img class="img-fluid col-md-10" style="object-fit:cover;" src="<?= $baseUrl ?>/storage/passport/<?= $rdt['passport_img'] ?>">
@@ -213,7 +195,7 @@ if (isset($_POST['submit-edit-requests'])) {
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Visa Image</label>
                     <?php if (!empty($rdt['visa_img'])) : ?>
-                        <a href="" nameImg="visa_img" delId="<?= $rdt['req_id']; ?>" class="text-danger btn-link deleteImagesReq"> Delete Visa </a>
+                        <a href="" nameImg="visa_img" delId="<?= $rdt['req_id']; ?>" class="deleteImagesReq text-danger btn-link "> Delete Visa </a>
                         <div class="row">
                             <div class="col-md-12" style="object-fit:cover;">
                                 <img class="img-fluid col-md-10" style="object-fit:cover;" src="<?= $baseUrl ?>/storage/visa/<?= $rdt['visa_img'] ?>">

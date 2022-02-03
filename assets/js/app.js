@@ -142,11 +142,11 @@ $("#table-request").on("click", ".detail-request", function(e) {
 
 $("#form-edit-requests-reject .deleteImagesReq").on("click",function (e) {
     e.preventDefault();
-    var pasDel   = $(this).attr("delId");
+    var delId   = $(this).attr("delId");
     var namedImg = $(this).attr("nameImg");
     return Swal.fire({
         title: 'Are you sure?',
-        text: 'Delete Image' + pasDel,
+        text: 'Delete Image' + delId,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#0d6efd',
@@ -154,13 +154,16 @@ $("#form-edit-requests-reject .deleteImagesReq").on("click",function (e) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            sendUrl = APP_URL + 'views/requests/passport_image_delete.php?delId=' + pasDel+'&nameImg='+ namedImg;
+            sendUrl = APP_URL + 'views/requests/passport_image_delete.php?delId=' + delId+'&nameImg='+ namedImg;
             return $.ajax({
                 type: "GET",
                 url: sendUrl,
                 dataType: "JSON",
+                beforeSend: function( xhr ) {
+                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                },
                 success: function(response) {
-                    swal.fire("Success", "", "success");
+                    return location.reload();
                 },
                 error: function(response) {
                     swal.fire("Something Wrong With Server", "", "error");
