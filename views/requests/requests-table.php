@@ -1,71 +1,65 @@
-<section id="faq" class="section-content mb-3 border-bottom">
-    <div class="max-w-xl mx-auto lg:ml-0" data-aos="fade-up">
+<section id="faq" class="section-content">
+    <div class="max-w-xl px-md-3 mx-auto lg:ml-0 d-flex flex-md-row justify-content-between" data-aos="fade-up">
         <header class="section-header">
             <h2>Requests Application</h2>
             <p>Residence Permit</p>
         </header>
+        <?php if ($_SESSION["user"]["user_group"] == 'user') : ?>
+            <div class="">
+                <a href="<?= $baseUrl; ?>/index.php?requests=data" class="btn btn-primary">
+                    <i class="fa fa-plus-circle"></i>
+                    <span class="mx-2">Add Requests</span>
+                </a>
+            </div>
+        <?php else : ?>
+            <div class="">
+                <a href="views/requests/requests-print-recap.php" target="_blank" class="btn btn-dark">
+                    <i class="fa fa-print"></i> <span class="mx-2">Print Recapt</span>
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 
-<div class="table-responsive py-5 px-2 text-left" id="table">
-    <table id="table-request" class="dataTables table table-bordered table-striped mt-5" style="width:100%">
-        <thead>
-            <tr>
-                <th class="p-2" width="50px">No</th>
-                <th class="p-2">Request Id</th>
-                <th class="p-2">Name</th>
-                <th class="p-2">Email</th>
-                <th class="p-2">Date</th>
-                <th class="p-2">Status</th>
-                <th class="p-2 text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $sql = "SELECT * FROM requests order by created_at";
-            $row = $db->prepare($sql);
-            $row->execute();
-            $fetch = $row->fetchAll();
-            $a = 1;
-            foreach ($fetch as $item) {
-                $reqid = $item['req_id'];
-            ?>
-                <tr>
-                    <td class="py-3"><?= $a ?></td>
-                    <td class="py-3">
-                        <a href="javscript:void(0)" class="detail-request" reqid="<?= $reqid; ?>" data-bs-toggle="modal" data-bs-target="#detailRequestModal">
-                            <?= $reqid; ?>
-                        </a>
-                    </td>
-                    <td class="py-3"><?= $item['name'] ?></td>
-                    <td class="py-3"><?= $item['email']; ?></td>
-                    <td class="py-3"><?= date('d/m/Y - H:i', strtotime($item['created_at'])); ?></td>
-                    <td class="py-3 d-flex gap-2">
-                        <span class="flex-grow-1 badge <?= ($item['req_status'] == 'Waiting') ? 'badge-warning bg-warning' : 'badge-primary bg-primary'; ?> d-flex 
-                                align-items-center justify-content-center">
-                            <small> <?= $item['req_status']; ?></small>
-                        </span>
-                        <a href="javscript:void(0)" class="change-status-requests btn btn-secondary btn-sm" reqid="<?= $reqid; ?>" reqstatus="<?= $item['req_status']; ?>">
-                            <span class="fas fa-sync"></span>
-                        </a>
-                    </td>
-                    <td class="py-3" style="text-align: center;">
-                        <button tableContents="requests" deleteId="<?= $reqid; ?>" class="delete-btn btn btn-danger btn-sm">
-                            <span class="fa fa-trash"></span>
-                        </button>
-                        <!-- <a onclick="return confirm('Apakah yakin data akan di hapus?')" href="index.php?users=delete&uuid=<?= $reqid; ?>" class="btn btn-danger btn-sm">
-                            <span class="fa fa-trash"></span>
-                        </a> -->
-                        <a href="views/requests/requests-print.php?reqid=<?= $reqid; ?>" target="_blank" class="btn btn-dark btn-sm">
-                            <span class="fa fa-print"></span>
-                        </a>
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <label class="h-5 lead font-weight-bold">Filter </label>
+            </div>
+            <div class="col-md-6">
+                <form class="row">
+                    <div class="form-group col-md-6 mb-2 mb-md-0">
+                        <select name="filby_permit" class="form-control">
+                            <option>All Categories</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 mb-2 mb-md-0">
+                        <select name="filby_permit" class="form-control">
+                            <option>All Permit Type</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    </td>
-                </tr>
-            <?php
-                $a++;
-            }
-            ?>
-        </tbody>
-    </table>
+<div class="card mb-3">
+    <div class="card-body">
+        <?php
+
+        if ($_SESSION["user"]["user_group"] == 'user') :
+            $sql = $db->prepare("SELECT * FROM requests WHERE uuid = ? order by created_at ");
+            $sql->execute(array($getIdUser));
+        else :
+            $sql =  $db->prepare("SELECT * FROM requests order by created_at");
+            $sql->execute();
+        endif;
+        $fetch = $sql->fetchAll();
+        $a = 1;
+
+        include "views/requests/requests-table-list.php";
+        ?>
+    </div>
 </div>

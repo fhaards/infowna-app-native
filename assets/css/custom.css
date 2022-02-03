@@ -80,6 +80,11 @@ body {
     animation: spinner 1.5s linear infinite;
 }
 
+table tr td,
+table tr th{
+    font-size:15px;
+}
+
 @media only screen and (max-width:768px) {
     .dash-jumbotron {
         background-size: 200px;

@@ -37,8 +37,17 @@ $countRequest = $dashRowReq->rowCount();
                             </td>
                             <td><?= date('d/m/Y - H:i', strtotime($itemDashReq['created_at'])); ?></td>
                             <td>
-                                <span class="flex-grow-1 badge <?= ($itemDashReq['req_status'] == 'Waiting') ? 'badge-warning bg-warning' : 'badge-primary bg-primary'; ?> d-flex 
-                                align-items-center justify-content-center">
+                            <?php 
+                                if($itemDashReq['req_status'] == 'Waiting') :
+                                    $classto = 'badge-warning bg-warning';
+                                elseif($itemDashReq['req_status'] == 'Approved') :
+                                    $classto = 'badge-primary bg-primary';
+                                else: 
+                                    $classto = 'badge-danger bg-danger';  
+                                endif;
+                            ?>
+                                <span class="flex-grow-1 badge p-2 <?= $classto; ?> d-flex 
+                                    align-items-center justify-content-center">
                                     <small> <?= $itemDashReq['req_status']; ?></small>
                                 </span>
                             </td>

@@ -1,6 +1,6 @@
 <!-- ======= Header ======= -->
-<header id="header" class="header fixed-top mb-5 border-bottom">
-    <div class="container ">
+<header id="header" class="header fixed-top mb-5 border-bottom px-3">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-10 col-12">
                 <div class="d-flex align-items-center justify-content-between">
@@ -12,7 +12,7 @@
                         <ul>
                             <?php if (isset($_SESSION["login_status"])) { ?>
                                 <li><a class="nav-link" href="index.php?home=dashboard">Dashboard</a></li>
-                                <li><a class="nav-link" href="index.php?requests=table">Requests</a></li>
+                                <li><a class="nav-link" href="index.php?requests=table">Request</a></li>
                                 <?php if ($_SESSION["user"]["user_group"] == 'admin') : ?>
                                     <li><a class="nav-link" href="index.php?users=table">Users</a></li>
                                     <li><a class="nav-link" href="index.php?about=about-edit">About</a></li>
@@ -24,6 +24,7 @@
                                     </ul>
                                 </li>
                             <?php } else { ?>
+                                
                                 <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
                                 <li><a class="nav-link scrollto" href="#about">About Us</a></li>
                                 <li><a class="nav-link scrollto" href="#contact">Contact</a></li>

@@ -1,10 +1,10 @@
 <?php
 $getIdUser    = $_SESSION["user"]["uuid"];
+include "config/helpers.php";
 $checkStatus  = "SELECT * FROM users WHERE uuid = ?";
 $rowCekStatus = $db->prepare($checkStatus);
 $rowCekStatus->execute(array($getIdUser));
 $getStatusUser = $rowCekStatus->fetch();
-
 
 if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
     if ($_SESSION["user"]["user_group"] == 'user') :
@@ -33,32 +33,45 @@ if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
         echo "404";
     endif;
 } else if (!empty($_GET['requests'])) { // REQUEST PAGES
+
     $getCheckRequests = "SELECT * FROM requests WHERE uuid = ?";
     $rowCekRequests   = $db->prepare($getCheckRequests);
     $rowCekRequests->execute(array($getIdUser));
-    $getCheckRequestsVal = $rowCekRequests->fetch();
+    // $getCheckRequestsVal = $rowCekRequests->fetch();
     $countRequestsByUuid = $rowCekRequests->rowCount();
+
     if ($_GET['requests'] == 'table') :
         if ($_SESSION["user"]["user_group"] == 'user') :
             if ($getStatusUser['user_status'] == 0) :
                 require "partials/check_status.php";
             else :
-                echo '<script>window.location="index.php?requests=data"</script>';
+                require "views/requests/requests-table.php";
             endif;
         else :
             require "views/requests/requests-table.php";
+        endif;
+        
+    elseif ($_GET['requests'] == 'add') :
+        if ($getStatusUser['user_status'] == 0) :
+            echo '<script>window.location="index.php?profile=profile-edit"</script>';
+        else :
+            require "views/requests/requests-form.php";
         endif;
     elseif ($_GET['requests'] == 'data') :
         if ($getStatusUser['user_status'] == 0) :
             echo '<script>window.location="index.php?profile=profile-edit"</script>';
         else :
-            if ($countRequestsByUuid != 0) :
-                require "views/requests/requests-detail.php";
-            else :
-                require "views/requests/requests-form.php";
-            endif;
+            require "views/requests/requests-form.php";
+        endif;
+    elseif ($_GET['requests'] == 'edit') :
+        if ($getStatusUser['user_status'] == 0) :
+            echo '<script>window.location="index.php?profile=profile-edit"</script>';
+        else :
+            $reqsIds = $_GET['reqid'];
+            require "views/requests/requests-edit-reject.php";
         endif;
     endif;
+
 } else if (!empty($_GET['home'])) { //DASHBOARD PAGES
     if ($_GET['home'] == 'dashboard') :
         require "views/dashboard.php";

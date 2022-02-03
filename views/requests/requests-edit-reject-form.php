@@ -1,12 +1,11 @@
 <?php
-$getAccounts    = "SELECT * FROM users_account WHERE uuid = ?";
-$rowAccounts    = $db->prepare($getAccounts);
-$rowAccounts->execute(array($getIdUser));
-$getAccountsVal = $rowAccounts->fetch();
-
-if (isset($_POST['submit-requests'])) {
+if (isset($_POST['submit-edit-requests'])) {
     // SETUP FILES
-    $reqId          = date('dmyhis') . strtoupper(substr($getIdUser, 0, 8));
+    $reqId          = htmlentities($_POST['req_id']);
+
+    $olddPassImg    = htmlentities($_POST['olddPassImg']);
+    $oldVisaImg     = htmlentities($_POST['oldVisaImg']);
+
     $pathFiles      = $_FILES['files']['name'];
     $pathVisas      = $_FILES['visa']['name'];
 
@@ -30,41 +29,38 @@ if (isset($_POST['submit-requests'])) {
     if (in_array($fileExtension, $validExtension)) :
         if (move_uploaded_file($_FILES['files']['tmp_name'], $newNamePath)) :
             if (move_uploaded_file($_FILES['visa']['tmp_name'], $newNameVisaPath)) :
-                
+
                 $reqStatus      = 'Waiting';
-                $name           = htmlentities($_POST['name']);
-                $email          = htmlentities($_POST['email']);
                 $phone          = htmlentities($_POST['phone']);
-                $gender         = htmlentities($_POST['gender']);
                 $address_id     = htmlentities($_POST['address_id']);
-                $nationality    = htmlentities($_POST['nationality']);
                 $passport_id    = htmlentities($_POST['passport_id']);
                 $requests_type  = htmlentities($_POST['requests_type']);
 
-                $insertRequests = "INSERT INTO `requests` (`req_id`,`uuid`,`name`,`email`, `gender`, `phone`,`passport_id`,`nationality`,`address_indonesia`,`passport_img`,`visa_img`,`req_status`,`requests_type`,`created_at`,`updated_at`,`category`)
-                VALUES (:req_id,:uuid,:name,:email,:gender,:phone,:passport_id,:nationality,:address_id,:passport_img,:visa_img,:req_status,:requests_type,:created_at,:updated_at,:category)";
+                $insertRequests = "UPDATE `requests`  SET
+                                'phone' = :phone,
+                                'passport_id' = :passport_id,
+                                'address_id' = :address_id,
+                                'passport_img' = :passport_img,
+                                'visa_img' = :visa_img,
+                                'req_status' = :req_status,
+                                'requests_type' = :requests_type,
+                                'updated_at' = :updated_at
+                                WHERE 'req_id' = :req_id";
+
                 $subRequests = $db->prepare($insertRequests);
                 $sendParRequest = array(
-                    ":req_id" => $reqId,
-                    ":uuid" => $getIdUser,
-                    ":name" => $name,
-                    ":email" => $email,
-                    ":gender" => $gender,
-                    ":phone" => $phone,
-                    ":passport_id" => $passport_id,
-                    ":nationality" => $nationality,
-                    ":address_id" => $address_id,
-                    ":passport_img" => $newName,
-                    ":visa_img" => $newNameVisa,
-                    ":req_status" => $reqStatus,
+                    ":req_id"        => $reqId,
+                    ":phone"         => $phone,
+                    ":passport_id"   => $passport_id,
+                    ":address_id"    => $address_id,
+                    ":passport_img"  => $newName,
+                    ":visa_img"      => $newNameVisa,
+                    ":req_status"    => $reqStatus,
                     ":requests_type" => $requests_type,
-                    ":created_at" => date('Y-m-d H:i:s'),
-                    ":updated_at" => date('Y-m-d H:i:s'),
-                    ":category" => 'NEW'
+                    ":updated_at"    => date('Y-m-d H:i:s'),
                 );
                 $savedRequest = $subRequests->execute($sendParRequest);
-                if ($savedRequest) {
-?>
+                if ($savedRequest) { ?>
                     <script type="text/javascript">
                         swal.fire({
                             icon: "success",
@@ -79,10 +75,10 @@ if (isset($_POST['submit-requests'])) {
                             }
                         });
                     </script>
-            <?php
-                } else {
+            <?php } else {
                     echo 'gagal';
                 }
+
             endif;
         else :
             ?>
@@ -106,31 +102,23 @@ if (isset($_POST['submit-requests'])) {
 }
 ?>
 
-<section id="faq" class="section-content mb-3 border-bottom">
-    <div class="max-w-xl mx-auto lg:ml-0  d-flex flex-row justify-content-between" data-aos="fade-up">
-        <header class="section-header">
-            <h2>Requests </h2>
-            <p>Residence Permit</p>
-        </header>
-        <div class="w-50">
-            <p class="">
-                After the form is submitted, the admin will check and provide a residence permit
-            </p>
-        </div>
-    </div>
-</section>
 
-<div class="card shadow-sm rounded-3 mb-3 border-dark">
-    <div class="card-header d-flex justify-content-between px-md-5 py-3 border-0">
-        <span> Submit Requests </span>
-        <span> <?= $_SESSION['user']['name']; ?> </span>
+<!-- PERSONAL INFORMATION -->
+<!-- $rdt['name'];  -->
+<div class="card border shadow-sm rounded-3 mb-3 border-danger">
+    <div class="card-header bg-danger text-white px-md-5 d-flex">
+        <div class="card-title p-0 m-0">Rejected Notes</div>
+    </div>
+    <div class="card-body py-3 px-md-5">
+        <?= $rdt['req_status_info']; ?>
     </div>
 </div>
-
-
-<form class="" action="" method="POST" enctype='multipart/form-data'>
+<form class="" action="" method="POST" id="form-edit-requests-reject" enctype='multipart/form-data'>
+    <input type="hidden" class="form-control" name="req_id" value="<?= $rdt['req_id']; ?>">
+    <input type="hidden" class="form-control" name="oldPassImg" value="<?= $rdt['passport_img']; ?>">
+    <input type="hidden" class="form-control" name="oldVisaImg" value="<?= $rdt['visa_img']; ?>">
     <!-- PERSONAL INFORMATION -->
-    <div class="card border shadow-sm rounded-3 mb-3 border-dark">
+    <div class="card border border-danger shadow-sm rounded-3 mb-3">
         <div class="card-header px-md-5 d-flex">
             <div class="card-title p-0 m-0">Personal Information</div>
         </div>
@@ -139,46 +127,46 @@ if (isset($_POST['submit-requests'])) {
                 <div class="col-md-6">
                     <label for="inputName" class="form-label">Name</label> <br>
                     <span class="text-primary">
-                        <?= $_SESSION['user']['name']; ?>
+                        <?= $rdt['name']; ?>
                     </span>
-                    <input type="hidden" class="form-control" name="name" id="inputName" value="<?= $_SESSION['user']['name']; ?>">
+                    <input type="hidden" class="form-control" name="name" id="inputName" value="<?= $rdt['name']; ?>">
                 </div>
 
                 <div class="col-md-6">
                     <label for="inputEmail4" class="form-label">Email</label> <br>
                     <span class="text-primary">
-                        <?= $_SESSION['user']['email']; ?>
+                        <?= $rdt['email']; ?>
                     </span>
-                    <input type="hidden" class="form-control" name="email" id="inputEmail4" value="<?= $_SESSION['user']['email']; ?>">
+                    <input type="hidden" class="form-control" name="email" id="inputEmail4" value="<?= $rdt['email']; ?>">
                 </div>
             </div>
             <div class="row mb-3 border-top pb-3 g-3">
                 <div class="col-md-4">
                     <label for="inputGender" class="form-label">Gender</label><br>
                     <span class="text-primary">
-                        <?= $getAccountsVal['gender']; ?>
+                        <?= $rdt['gender']; ?>
                     </span>
-                    <input type="hidden" class="form-control" name="gender" id="inputGender" value="<?= $getAccountsVal['gender']; ?>">
+                    <input type="hidden" class="form-control" name="gender" id="inputGender" value="<?= $rdt['gender']; ?>">
                 </div>
 
                 <div class="col-md-4">
                     <label for="inputCountry" class="form-label">Nationality</label><br>
                     <span class="text-primary">
-                        <?= $getAccountsVal['country']; ?>
+                        <?= $rdt['nationality']; ?>
                     </span>
-                    <input type="hidden" class="form-control" name="nationality" id="inputGender" value="<?= $getAccountsVal['country']; ?>">
+                    <input type="hidden" class="form-control" name="nationality" id="inputGender" value="<?= $rdt['nationality']; ?>">
                 </div>
 
                 <div class="col-md-4">
                     <label for="inputPhone" class="form-label">Phone Number</label><br>
-                    <input type="text" class="form-control" name="phone" id="inputPhone" value="<?= $getAccountsVal['phone']; ?>">
+                    <input type="text" class="form-control" name="phone" id="inputPhone" value="<?= $rdt['phone']; ?>">
                 </div>
 
             </div>
         </div>
     </div>
     <!-- REQUESTS INFORMATION -->
-    <div class="card border shadow-sm rounded-3 mb-3 border-dark">
+    <div class="card border border-danger shadow-sm rounded-3 mb-3">
         <div class="card-header px-md-5 d-flex">
             <div class="card-title p-0 m-0">Request Information</div>
         </div>
@@ -191,38 +179,61 @@ if (isset($_POST['submit-requests'])) {
                     ?>
                     <select name="requests_type" class="form-control">
                         <?php foreach ($permitarr as $parr) : ?>
-                            <option value="<?= $parr; ?>"><?= $parr; ?></option>
+                            <option value="<?= $parr; ?>" <?= ($rdt['requests_type'] == $parr) ? 'selected' : ''; ?>><?= $parr; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label for="inputPassportNumber" class="form-label">Passport Number</label>
-                    <input type="text" class="form-control" id="inputPassportNumber" name="passport_id" placeholder="Input Passport ID/Number " required>
+                    <input type="text" class="form-control" id="inputPassportNumber" name="passport_id" value="<?= $rdt['passport_id']; ?>">
                 </div>
             </div>
             <div class="row mb-3 pb-3 g-3">
+
                 <div class="col-md-12">
                     <label for="inputAddress" class="form-label">Address in Indonesia</label>
-                    <textarea class="form-control" id="inputAddress" name="address_id" placeholder="Input youre address in indonesia" required></textarea>
+                    <textarea class="form-control" id="inputAddress" name="address_id" placeholder="Input youre address in indonesia"><?= $rdt['address_indonesia']; ?></textarea>
                 </div>
-                <div class="col-md-12">
+
+                <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Passport Image</label>
-                    <span class="text-secondary"><small>( Supported files : jpg, jpeg, png ) </small></span>
-                    <input class="form-control" type="file" name='files' id="formFile" required>
+                    <?php if (!empty($rdt['passport_img'])) : ?>
+                        <a href="javascript:void(0);" nameImg="passport_img"  delId="<?= $rdt['req_id']; ?>" class="deleteImagesReq text-danger btn-link"> Delete Passport </a>
+                        <div class="row">
+                            <div class="col-md-10 row" style="object-fit:cover;">
+                                <img class="img-fluid col-md-10" style="object-fit:cover;" src="<?= $baseUrl ?>/storage/passport/<?= $rdt['passport_img'] ?>">
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <span class="text-secondary"><small>( Supported files : jpg, jpeg, png ) </small></span>
+                        <input class="form-control" type="file" name='files' id="formFile" accept=".png, .jpg, .jpeg">
+                    <?php endif; ?>
                 </div>
-                <div class="col-md-12">
+
+                <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Visa Image</label>
-                    <span class="text-secondary"><small>( Supported files : jpg, jpeg, png ) </small></span>
-                    <input class="form-control" type="file" name='visa' id="formVisa" required>
+                    <?php if (!empty($rdt['visa_img'])) : ?>
+                        <a href="" nameImg="visa_img" delId="<?= $rdt['req_id']; ?>" class="text-danger btn-link deleteImagesReq"> Delete Visa </a>
+                        <div class="row">
+                            <div class="col-md-12" style="object-fit:cover;">
+                                <img class="img-fluid col-md-10" style="object-fit:cover;" src="<?= $baseUrl ?>/storage/visa/<?= $rdt['visa_img'] ?>">
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <span class="text-secondary"><small>( Supported files : jpg, jpeg, png ) </small></span>
+                        <input class="form-control" type="file" name='visa' id="formVisa" accept=".png, .jpg, .jpeg">
+                    <?php endif; ?>
                 </div>
+
             </div>
         </div>
     </div>
+
     <div class="row mb-3">
         <div class="col-12">
-            <button type="submit" name="submit-requests" class="btn btn-primary d-flex align-items-center gap-3 justify-content-center w-100">
-                <span class="fas fa-save"></span>
-                <span>Save</span>
+            <button type="submit" name="submit-edit-requests" class="btn btn-primary d-flex align-items-center gap-3 justify-content-center w-100">
+                <span class="fas fa-pen"></span>
+                <span>Edit</span>
             </button>
         </div>
     </div>

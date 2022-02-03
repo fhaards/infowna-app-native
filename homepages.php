@@ -15,7 +15,7 @@ $getMision = $getRowComp['mission'];
             <div class="col-lg-10 col-12 row">
                 <div class="col-lg-6 d-flex flex-column justify-content-center">
                     <h1 data-aos="fade-up">Hello , <br> Welcome to <br> SWS Consultant</h1>
-                    <h2 data-aos="fade-up" data-aos-delay="400">Learning new systems and processes is not mandatory...but neither is staying in business</h2>
+                    <!-- <h2 data-aos="fade-up" data-aos-delay="400">Learning new systems and processes is not mandatory...but neither is staying in business</h2> -->
 
                 </div>
                 <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">

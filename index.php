@@ -26,7 +26,6 @@
     <?php include "partials/modals.php"; ?>
     <?php include "stacks-js-main.php"; ?>
     <?php include "stacks-js.php"; ?>
-
 </body>
 
 </html>

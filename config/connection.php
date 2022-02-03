@@ -2,8 +2,11 @@
 
 //Root file
 $rootName = "localhost";
-$rootUrl  = "http://localhost/";
+
+//URI
+$rootUrl  = "http://localhost/"; // <<<<<<< RUBAH KE 8080 JIKA HARUS
 $rootMain = "wna-app-sws";
+$baseUrl  = $rootUrl . $rootMain;
 
 //Database Config
 $db_host = $rootName;

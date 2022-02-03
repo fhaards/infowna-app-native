@@ -7,8 +7,9 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
 <!-- Bootstrap  -->
-<link href="vendor/datatables/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="vendor/datatables/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet"> -->
+<link href="vendor/datatables/datatables/media/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <!-- <link href="config/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
 <link href="config/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 <link href="config/aos-master/dist/aos.css" rel="stylesheet">

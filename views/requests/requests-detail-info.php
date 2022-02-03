@@ -1,27 +1,3 @@
-<?php
-$getAccounts    = "SELECT * FROM users_account WHERE uuid = ?";
-$rowAccounts    = $db->prepare($getAccounts);
-$rowAccounts->execute(array($getIdUser));
-$getAccountsVal = $rowAccounts->fetch();
-?>
-<div class="d-flex flex-column flex-md-row justify-content-md-between w-100 mb-5">
-    <div class="flex-grow-1 w-75">
-        <h1 class="display-6">Application Detail</h1>
-        <h2 class="mt-2 text-3xl font-bold sm:text-4xl">
-            <span class="text-blue-800">Residence Permit</span>
-        </h2>
-    </div>
-</div>
-
-<div class="card shadow-sm rounded-3 mb-3 border-0">
-    <div class="card-body d-flex justify-content-between px-md-5 py-3 <?= ($getCheckRequestsVal['req_status'] == 'Waiting') ? 'bg-warning' : 'bg-primary'; ?>">
-        <span>REQUEST ID : <strong><?= $getCheckRequestsVal['req_id']; ?></strong></span>
-
-        <span class="badge bg-light text-dark d-flex align-items-center">
-            <span>Status : <?= $getCheckRequestsVal['req_status']; ?> </span>
-        </span>
-    </div>
-</div>
 <!-- PERSONAL INFORMATION -->
 <div class="card border shadow-sm rounded-3 mb-3">
     <div class="card-header px-md-5 d-flex">
@@ -91,11 +67,19 @@ $getAccountsVal = $rowAccounts->fetch();
                     <?= $getCheckRequestsVal['passport_id']; ?>
                 </div>
             </div>
-            <div class="col-md-12 border-top py-3">
+            <div class="col-md-6 border-top py-3">
                 <label for="inputPassportImage" class="form-label">Passport Image</label>
                 <div class="d-flex justify-content-center">
                     <div class="col-md-5 col-10">
                         <img src="storage/passport/<?= $getCheckRequestsVal['passport_img']; ?>" class="img-responsive w-100">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 border-top py-3">
+                <label for="inputPassportImage" class="form-label">Visa Image</label>
+                <div class="d-flex justify-content-center">
+                    <div class="col-md-5 col-10">
+                        <img src="storage/visa/<?= $getCheckRequestsVal['visa_img']; ?>" class="img-responsive w-100">
                     </div>
                 </div>
             </div>
