@@ -4,9 +4,57 @@ $rowAccounts    = $db->prepare($getAccounts);
 $rowAccounts->execute(array($getIdUser));
 $getAccountsVal = $rowAccounts->fetch();
 
+
+// CHECK AVAILABLE TYPES
+$totypediff = [];
+$fordiff = $db->prepare("SELECT requests_type,uuid FROM requests WHERE uuid = ?");
+$fordiff->execute(array($getIdUser));
+$fetchdiff = $fordiff->fetchAll();
+foreach($fetchdiff as $tts){
+    $totypediff[] = $tts['requests_type'];
+}
+$permitarr = ['KITAS', 'ITK', 'KITAP', 'EPO', 'ERP'];
+$result = array_diff($permitarr , $totypediff); 
+if(empty($result)){
+    ?>
+    <script type="text/javascript">
+        swal.fire({
+            icon: "error",
+            title: "Error !!",
+            text: "You already have all Permission Requests",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 2000,
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                window.location.href = "index.php?requests=table";
+            }
+        });
+    </script>
+<?php
+}
+
 if (isset($_POST['submit-requests'])) {
+
+    $expiredDate = null;
     // SETUP FILES
-    $reqId          = date('dmyhis') . strtoupper(substr($getIdUser, 0, 8));
+    $requests_type  = htmlentities($_POST['requests_type']);
+
+    if ($requests_type == 'KITAS') :
+        $expiredDate    = date('Y-m-d H:i:s', strtotime('+1 years'));
+    endif;
+
+    if ($requests_type == 'ITK') :
+        $expiredDate    = date('Y-m-d H:i:s', strtotime('+1 month'));
+    endif;
+
+    if ($requests_type == 'ITAP') :
+        $expiredDate    = date('Y-m-d H:i:s', strtotime('+5 years'));
+    endif;
+
+
+
+    $reqId          = $requests_type . '-' . date('dmy') . '-' . strtoupper(substr($getIdUser, 0, 4));
     $pathFiles      = $_FILES['files']['name'];
     $pathVisas      = $_FILES['visa']['name'];
 
@@ -30,7 +78,7 @@ if (isset($_POST['submit-requests'])) {
     if (in_array($fileExtension, $validExtension)) :
         if (move_uploaded_file($_FILES['files']['tmp_name'], $newNamePath)) :
             if (move_uploaded_file($_FILES['visa']['tmp_name'], $newNameVisaPath)) :
-                
+
                 $reqStatus      = 'Waiting';
                 $name           = htmlentities($_POST['name']);
                 $email          = htmlentities($_POST['email']);
@@ -39,10 +87,10 @@ if (isset($_POST['submit-requests'])) {
                 $address_id     = htmlentities($_POST['address_id']);
                 $nationality    = htmlentities($_POST['nationality']);
                 $passport_id    = htmlentities($_POST['passport_id']);
-                $requests_type  = htmlentities($_POST['requests_type']);
 
-                $insertRequests = "INSERT INTO `requests` (`req_id`,`uuid`,`name`,`email`, `gender`, `phone`,`passport_id`,`nationality`,`address_indonesia`,`passport_img`,`visa_img`,`req_status`,`requests_type`,`created_at`,`updated_at`,`category`)
-                VALUES (:req_id,:uuid,:name,:email,:gender,:phone,:passport_id,:nationality,:address_id,:passport_img,:visa_img,:req_status,:requests_type,:created_at,:updated_at,:category)";
+
+                $insertRequests = "INSERT INTO `requests` (`req_id`,`uuid`,`name`,`email`, `gender`, `phone`,`passport_id`,`nationality`,`address_indonesia`,`passport_img`,`visa_img`,`req_status`,`requests_type`,`created_at`,`updated_at`,`expired_at`,`category`)
+                    VALUES (:req_id,:uuid,:name,:email,:gender,:phone,:passport_id,:nationality,:address_id,:passport_img,:visa_img,:req_status,:requests_type,:created_at,:updated_at,:expired_at,:category)";
                 $subRequests = $db->prepare($insertRequests);
                 $sendParRequest = array(
                     ":req_id" => $reqId,
@@ -60,7 +108,8 @@ if (isset($_POST['submit-requests'])) {
                     ":requests_type" => $requests_type,
                     ":created_at" => date('Y-m-d H:i:s'),
                     ":updated_at" => date('Y-m-d H:i:s'),
-                    ":category" => 'NEW'
+                    ":expired_at" => $expiredDate,
+                    ":category" => 'New'
                 );
                 $savedRequest = $subRequests->execute($sendParRequest);
                 if ($savedRequest) {
@@ -186,14 +235,18 @@ if (isset($_POST['submit-requests'])) {
             <div class="row mb-3 pb-3 g-3">
                 <div class="col-md-6">
                     <label for="inputPermit" class="form-label">Permission Type</label><br>
-                    <?php
-                    $permitarr = ['KITAS', 'ITK', 'KITAB', 'EPO', 'ERP'];
-                    ?>
                     <select name="requests_type" class="form-control">
-                        <?php foreach ($permitarr as $parr) : ?>
+                        <?php foreach ($result as $parr) : ?>
                             <option value="<?= $parr; ?>"><?= $parr; ?></option>
                         <?php endforeach; ?>
                     </select>
+
+                    <!-- <select name="requests_type" class="form-control">
+                        <?php foreach ($permitarr as $parr) : ?>
+                            <option value="<?= $parr; ?>"><?= $parr; ?></option>
+                        <?php endforeach; ?>
+                    </select> -->
+
                 </div>
                 <div class="col-md-6">
                     <label for="inputPassportNumber" class="form-label">Passport Number</label>

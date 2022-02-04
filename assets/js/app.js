@@ -13,7 +13,7 @@ function setStatusColor(param){
 function successChangeStatus() {
     swal.fire({
         icon: "success",
-        text: "status changed",
+        text: "Data changed",
         showConfirmButton: false,
         allowOutsideClick: false,
         timer: 2000,
@@ -134,16 +134,71 @@ $("#table-request").on("click", ".detail-request", function(e) {
             $('#detailRequestModal .detail-passportImg').attr("src", "storage/passport/" + data[0].passport_img);
             $('#detailRequestModal .detail-visaImg').attr("src", "storage/visa/" + data[0].visa_img);
             $('#detailRequestModal .detail-status').html(data[0].req_status);
+            if(data[0].img_letter !== ''){
+                $('#detailRequestModal .detail-letter').attr("src", "storage/extend/" + data[0].img_letter);
+            }
             setStatusColor(data[0].req_status);
         }
     });
 });
 
+//Requests Details
+$("#table-request").on("click", ".extends-btn", function(e) {
+    e.preventDefault();
+    var getReqId = $(this).attr("reqid");
+    $.ajax({
+        url: APP_URL + 'views/requests/requests-detail-admin.php?reqid=' + getReqId,
+        type: 'get',
+        dataType: "JSON",
+        contentType: false,
+        cache: false,
+        success: function(data) {
+            $('#extendRequests .extend-reqid').html(data[0].req_id);
+            $('#extendRequests .extend-permit').html(data[0].requests_type);
+            $('#form-input-extends .extend-sendid').val(data[0].req_id);
+            $('#form-input-extends .extend-sendpermit').val(data[0].requests_type);
+        }
+    });
+});
 
-$("#form-edit-requests-reject .deleteImagesReq").on("click",function (e) {
+//Requests Extends
+$("#form-input-extends").on("submit", function(e){
+    e.preventDefault();
+    var formData =  new FormData(this);
+    // var getReqId = $("#form-input-extends .extend-sendid").val();
+    $.ajax({
+        // url: APP_URL + 'views/requests/requests-extend.php',
+        url: APP_URL + 'views/requests/requests-extend.php',
+        data: formData,
+        dataType: "JSON",
+        type: 'POST',
+        contentType: false,
+        cache: false,
+        processData: false,
+        beforeSend: function( xhr ) {
+            xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+        },
+        success: function(response){
+            if (response.status == 200) {
+                successChangeStatus();
+                location.reload();
+            } else {
+                swal.fire("Something Wrong", "", "error");
+            }
+        },                
+        error: function(response) {
+            swal.fire(response.message,"", "error");
+        },
+    });
+});
+
+
+$("#form-edit-image .deleteImagesReq").on("click",function (e) {
     e.preventDefault();
     var delId   = $(this).attr("delId");
     var namedImg = $(this).attr("nameImg");
+    var valImg = $(this).attr("valImg");
+
     return Swal.fire({
         title: 'Are you sure?',
         text: 'Delete Image' + delId,
@@ -154,7 +209,7 @@ $("#form-edit-requests-reject .deleteImagesReq").on("click",function (e) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            sendUrl = APP_URL + 'views/requests/passport_image_delete.php?delId=' + delId+'&nameImg='+ namedImg;
+            sendUrl = APP_URL + 'views/requests/passport_image_delete.php?delId=' + delId+'&nameImg='+ namedImg + '&valImg=' + valImg;
             return $.ajax({
                 type: "GET",
                 url: sendUrl,
@@ -166,11 +221,33 @@ $("#form-edit-requests-reject .deleteImagesReq").on("click",function (e) {
                     return location.reload();
                 },
                 error: function(response) {
-                    swal.fire("Something Wrong With Server", "", "error");
+                    swal.fire("Cannot Delete", "error");
                 },
             });
         }
     });
+});
+
+$("#form-edit-image .btn-edit-passport").on("click",function (e) {
+    e.preventDefault();
+    $("#form-edit-image .show-upload-passport").toggleClass("d-none");
+    $("#form-edit-image .show-image-passport").toggleClass("d-none");
+});
+
+$("#form-edit-image .btn-edit-visa").on("click",function (e) {
+    e.preventDefault();
+    $("#form-edit-image .show-upload-visa").toggleClass("d-none");
+    $("#form-edit-image .show-image-visa").toggleClass("d-none");
+});
+
+// $("#filter-requests-table").on("submit",function(){
+//     var getfilcat = $("#filter-requests-table .filby_cat").val();
+//     var getfiltype = $("#filter-requests-table .filby_type").val();
+//     window.location.href = APP_URL + "index.php?requests=table&filby_cat="+ getfilcat+"&filby_type="+ getfiltype;
+// });
+
+$("#filter-requests-table .btn-clear-filter").on("click",function(){
+    window.location.href = APP_URL + "index.php?requests=table";
 });
 
 // $("#table-request").on("click", ".change-status-requests", function (e) {

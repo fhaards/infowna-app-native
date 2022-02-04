@@ -101,6 +101,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="row py-3">
+                    <div class="col-md-12 py-1">
+                        <label for="inputPassportImage" class="text-secondaryform-label">Ministry Letters</label>
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="col-md-5 col-10">
+                                <img class="img-responsive detail-letter w-100" src="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

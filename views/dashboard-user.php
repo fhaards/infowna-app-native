@@ -13,7 +13,7 @@ $countRequest = $dashRowReq->rowCount();
     if (empty($countRequest)) :
     ?>
         <div class="card-body d-flex flex-row justify-content-center gap-3 align-items-center">
-            You Have no requests .. 
+            You Have no requests ..
         </div>
     <?php
     else :
@@ -23,7 +23,9 @@ $countRequest = $dashRowReq->rowCount();
                 <table class="table w-100">
                     <tr>
                         <th>Request Id</th>
-                        <th>Created Date</th>
+                        <th>Category</th>
+                        <th>Permit Type</th>
+                        <th>Created at</th>
                         <th>Status</th>
                     </tr>
                     <?php
@@ -31,23 +33,18 @@ $countRequest = $dashRowReq->rowCount();
                     ?>
                         <tr>
                             <td>
-                                <a href="index.php?requests=data">
-                                    <?= $itemDashReq['req_id']; ?>
-                                </a>
+                                <?= $itemDashReq['req_id']; ?>
                             </td>
-                            <td><?= date('d/m/Y - H:i', strtotime($itemDashReq['created_at'])); ?></td>
                             <td>
-                            <?php 
-                                if($itemDashReq['req_status'] == 'Waiting') :
-                                    $classto = 'badge-warning bg-warning';
-                                elseif($itemDashReq['req_status'] == 'Approved') :
-                                    $classto = 'badge-primary bg-primary';
-                                else: 
-                                    $classto = 'badge-danger bg-danger';  
-                                endif;
-                            ?>
-                                <span class="flex-grow-1 badge p-2 <?= $classto; ?> d-flex 
-                                    align-items-center justify-content-center">
+                                <strong><label class="<?= categoryBadge($itemDashReq['category']); ?>"><?= $itemDashReq['category'] ?></label></strong>
+
+                            </td>
+                            <td>
+                                <?= $itemDashReq['requests_type']; ?>
+                            </td>
+                            <td><?= date('Y - M - d', strtotime($itemDashReq['created_at'])); ?></td>
+                            <td>
+                                <span class="flex-grow-1 p-2 badge <?= statusBadge($itemDashReq['req_status']); ?> d-flex align-items-center justify-content-center">
                                     <small> <?= $itemDashReq['req_status']; ?></small>
                                 </span>
                             </td>
@@ -56,6 +53,9 @@ $countRequest = $dashRowReq->rowCount();
                     }
                     ?>
                 </table>
+            </div>
+            <div class="d-flex py-3 align-items-center justify-content-center">
+                <a href="index.php?requests=table"> See All Data</a>
             </div>
         </div>
     <?php

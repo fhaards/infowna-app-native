@@ -70,6 +70,8 @@ if (!empty($_GET['users'])) { //USER (NOT AUTH) PAGES
             $reqsIds = $_GET['reqid'];
             require "views/requests/requests-edit-reject.php";
         endif;
+    elseif ($_GET['requests'] == 'edit-visa') :
+        require "views/requests/request-edit-img-visa.php";
     endif;
 
 } else if (!empty($_GET['home'])) { //DASHBOARD PAGES

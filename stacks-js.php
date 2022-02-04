@@ -40,7 +40,13 @@
     var APP_URL = 'http://localhost/' + APP_DIR + '/';
 
     //Base DataTables
-    var table = $('.dataTables').DataTable();
+    var table = $('.dataTables').DataTable({
+        pageLength: 10
+    });
+
+    var tableRequests = $('#table-request').DataTable({
+        pageLength: 5
+    });
 
 
     //Function Setup
